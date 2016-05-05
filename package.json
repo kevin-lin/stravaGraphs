@@ -1,9 +1,10 @@
 {
-  "name": "angularboilerplate",
+  "name": "stravagraphs",
   "version": "1.0.0",
-  "description": "Angular Boiler Plate ======",
-  "main": "index.js",
+  "description": "free strava premium features",
+  "main": "app.js",
   "dependencies": {
+    "express": "^4.13.4",
     "http-server": "^0.9.0"
   },
   "devDependencies": {},
@@ -11,5 +12,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kevin-lin/stravaGraphs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kevin-lin/stravaGraphs/issues"
+  },
+  "homepage": "https://github.com/kevin-lin/stravaGraphs"
 }
