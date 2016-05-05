@@ -1,0 +1,15 @@
+{
+  "name": "angularboilerplate",
+  "version": "1.0.0",
+  "description": "Angular Boiler Plate ======",
+  "main": "index.js",
+  "dependencies": {
+    "http-server": "^0.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
