@@ -1,0 +1,15 @@
+extends index.pug
+
+block partial
+  .container
+    h3 Suffer Score: #{sufferScore}
+    table
+      tr
+        td
+          canvas#myChart(width="400" height="400")
+        td
+          canvas#myDonut(width="400" height="400")
+  script(type="text/javascript").
+    var heartRateZones =!{JSON.stringify(heartRateZones)}
+  script(type="text/javascript" src="/bower_components/Chart.js/dist/Chart.js")
+  script(type="text/javascript" src="/js/app.js")

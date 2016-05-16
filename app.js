@@ -8,7 +8,6 @@ app.use(cookieParser());
 app.use('/css', express.static('css'));
 app.use('/js', express.static('js'));
 app.use('/img', express.static('img'));
-app.use('/views', express.static('views'));
 app.use('/bower_components', express.static('bower_components'));
 app.set('views', './views');
 app.set('view engine', 'pug');
@@ -55,7 +54,17 @@ app.get('/activities', function(req, res){
 });
 
 app.get('/activities/:id', function(req, res){
-    res.send(req.params.id);
+    var sufferScore = 0;
+    strava.streams.activity({'access_token': req.cookies.access_token, 'id': req.params.id, 'types':['heartrate', 'time']},function(err,payload) {
+        if(!err){
+            sufferScore = Math.round(getSufferScore(payload));
+            var heartRateZones = getHeartrateZones(payload);
+
+            res.render('charts', {sufferScore: sufferScore, heartRateZones: heartRateZones});
+        }
+        else
+            console.log(err);
+    });
 });
 
 app.get('/api/heartrate', function(req, res){
