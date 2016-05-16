@@ -27,7 +27,7 @@ app.get('/', function(req, res){
 app.get('/auth', function(req, res){
     res.redirect('https://www.strava.com/oauth/authorize?' +
                     'client_id=' + process.env.STRAVA_CLIENT_ID +
-                    '&redirect_uri=' + 'http://localhost:8080/auth_redirect' +
+                    '&redirect_uri=' + process.env.STRAVA_REDIRECT_URI +
                     '&response_type=code' +
                     '&scope=view_private');
 });
