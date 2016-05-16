@@ -1,4 +1,8 @@
 extends ./index.pug
 
 block partial
-    h1 Activities
+  ul
+    each activity in activityArr
+      li
+        each value, key in activity
+          span= key + ': ' + value + ' '

@@ -40,18 +40,18 @@ app.get('/auth_redirect', function(req, res){
         var res_obj = JSON.parse(body);
         access_token = res_obj.access_token;
         res.cookie('access_token', access_token);
-        strava.athlete.listActivities({'access_token': access_token}, function(err, payload){
-            res.json(payload);
-            var activityArr = [];
-            for(var i = 0; i < payload.length; i += 1){
-                activityArr.push({name: payload[i].name, id: payload[i].id});
-            }
-        });
+        res.redirect('/');
     });
 });
 
 app.get('/activities', function(req, res){
-    res.render('activities');
+    strava.athlete.listActivities({'access_token': req.cookies.access_token}, function(err, payload){
+        var activityArr = [];
+        for(var i = 0; i < payload.length; i += 1){
+            activityArr.push({name: payload[i].name, id: payload[i].id});
+        }
+        res.render('activities', {activityArr: activityArr});
+    });
 });
 
 app.get('/api/heartrate', function(req, res){
