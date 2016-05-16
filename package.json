@@ -4,8 +4,10 @@
   "description": "free strava premium features",
   "main": "app.js",
   "dependencies": {
+    "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
-    "http-server": "^0.9.0"
+    "http-server": "^0.9.0",
+    "request": "^2.72.0"
   },
   "devDependencies": {},
   "scripts": {

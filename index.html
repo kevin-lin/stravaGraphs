@@ -52,14 +52,22 @@
             <h1>{{title}}</h1>
                 <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
                 <p>{{data}}</p>
+                <p>Suffer Score: {{sufferscore}}</p>
+                <table>
+                    <tr>
+                        <td><canvas id="myChart" width="400" height="400"></canvas></td>
+                        <td><canvas id="myDonut" width="400" height="400"></canvas></td>
+                    </tr>
+                </table>
             </div>
-
         </div><!-- /.container -->
 
 
 <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="bower_components/Chart.js/dist/Chart.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
