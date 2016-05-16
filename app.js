@@ -54,6 +54,10 @@ app.get('/activities', function(req, res){
     });
 });
 
+app.get('/activities/:id', function(req, res){
+    res.send(req.params.id);
+});
+
 app.get('/api/heartrate', function(req, res){
     strava.streams.activity({'id': 572978386, 'types':['heartrate', 'time']},function(err,payload) {
         if(!err) {

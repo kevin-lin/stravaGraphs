@@ -1,8 +1,15 @@
 extends ./index.pug
 
 block partial
-  ul
-    each activity in activityArr
-      li
-        each value, key in activity
-          span= key + ': ' + value + ' '
+  .container
+    ul
+      each activity in activityArr
+        li
+          .row
+            .col.s12.m6
+              .card.deep-orange.darken-2
+                .card-content.white-text
+                  span.card-title #{activity.name}
+                  p
+                .card-action
+                  a(href='activities/'+activity.id) See Analysis
