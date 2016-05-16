@@ -8,6 +8,8 @@ app.use(cookieParser());
 app.use('/css', express.static('css'));
 app.use('/js', express.static('js'));
 app.use('/bower_components', express.static('bower_components'));
+app.set('views', './views');
+app.set('view engine', 'pug');
 
 app.use(function(req, res, next){
     // if(req.cookies.access_token === undefined){
@@ -17,7 +19,8 @@ app.use(function(req, res, next){
 });
 
 app.get('/', function(req, res){
-    res.sendFile('index.html', {'root':__dirname});
+    res.render('index');
+    // res.sendFile('index.html', {'root':__dirname});
 });
 
 app.get('/auth', function(req, res){
