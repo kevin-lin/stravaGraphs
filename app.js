@@ -113,8 +113,8 @@ app.get('/api/heartrate/sufferscore', function(req, res){
     });
 });
 
-app.listen(8080, function(){
-  console.log('Example app listening on port 8080');
+app.listen(process.env.PORT || 8080, function(){
+  console.log('Example app listening on port ' + process.env.PORT || 8080);
 });
 
 const AUTOPAUSE_INTERVAL = 18;
