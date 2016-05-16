@@ -8,25 +8,13 @@ html
     nav
       .container
         .nav-wrapper
-          a.brand-logo(href='#') Strava Graphs
+          a.brand-logo(href='/') Strava Graphs
           ul#nav-mobile.right
             li
-              a(href='#') Activities
+              a(href='/activities') Activities
             li
               a(href='#') Charts
-    #index-banner.section.no-pad-bot
-      .container
-          br
-          br
-          h1.header.center Strava Graphs
-          .row.center
-            h5.header.col.s12.light Charts and graphs to help you analyze your activity data
-          .row.center
-            a(href="/auth")
-              img(src="img/ConnectWithStrava.png" href="/auth")
-          br
-          br
-
+    block partial
 
     script(type="text/javascript" src="bower_components/jquery/dist/jquery.js")
     script(type="text/javascript" src="bower_components/Materialize/dist/js/materialize.js")

@@ -8,6 +8,7 @@ app.use(cookieParser());
 app.use('/css', express.static('css'));
 app.use('/js', express.static('js'));
 app.use('/img', express.static('img'));
+app.use('/views', express.static('views'));
 app.use('/bower_components', express.static('bower_components'));
 app.set('views', './views');
 app.set('view engine', 'pug');
@@ -20,7 +21,7 @@ app.use(function(req, res, next){
 });
 
 app.get('/', function(req, res){
-    res.render('index');
+    res.render('home');
     // res.sendFile('index.html', {'root':__dirname});
 });
 
@@ -47,6 +48,10 @@ app.get('/auth_redirect', function(req, res){
             }
         });
     });
+});
+
+app.get('/activities', function(req, res){
+    res.render('activities');
 });
 
 app.get('/api/heartrate', function(req, res){
