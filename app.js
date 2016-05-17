@@ -39,17 +39,17 @@ app.get('/auth_redirect', function(req, res){
         var res_obj = JSON.parse(body);
         access_token = res_obj.access_token;
         res.cookie('access_token', access_token);
-        res.redirect('/');
+        res.redirect('/activities');
     });
 });
 
 app.get('/activities', function(req, res){
     strava.athlete.listActivities({'access_token': req.cookies.access_token}, function(err, payload){
-        var activityArr = [];
-        for(var i = 0; i < payload.length; i += 1){
-            activityArr.push({name: payload[i].name, id: payload[i].id});
+        if(!err){
+            res.render('activities', {activityArr: payloadToActivityArr(payload)});
         }
-        res.render('activities', {activityArr: activityArr});
+        else
+            console.log(err);
     });
 });
 
@@ -59,8 +59,7 @@ app.get('/activities/:id', function(req, res){
         if(!err){
             sufferScore = Math.round(getSufferScore(payload));
             var heartRateZones = getHeartrateZones(payload);
-
-            res.render('charts', {sufferScore: sufferScore, heartRateZones: heartRateZones});
+            res.render('charts', {activityArr: [{name: "foo", id: 123}], sufferScore: sufferScore, heartRateZones: heartRateZones});
         }
         else
             console.log(err);
@@ -90,8 +89,8 @@ app.get('/api/heartrate/average', function(req, res){
     });
 });
 
-app.get('/api/heartrate/zones', function(req, res){
-    strava.streams.activity({'id': 572978386, 'types':['heartrate', 'time']},function(err,payload) {
+app.get('/api/heartrate/zones/:activity_id', function(req, res){
+    strava.streams.activity({'access_token': req.cookies.access_token, 'id': req.params.activity_id, 'types':['heartrate', 'time']},function(err,payload) {
         if(!err) {
             res.json(getHeartrateZones(payload));
         }
@@ -101,8 +100,8 @@ app.get('/api/heartrate/zones', function(req, res){
     });
 });
 
-app.get('/api/heartrate/sufferscore', function(req, res){
-    strava.streams.activity({'id': 572978386, 'types':['heartrate', 'time']},function(err,payload) {
+app.get('/api/heartrate/sufferscore/:activity_id', function(req, res){
+    strava.streams.activity({'access_token': req.cookies.access_token, 'id': req.params.activity_id, 'types':['heartrate', 'time']},function(err,payload) {
         if(!err) {
             var sufferScore = Math.round(getSufferScore(payload));
             res.send(sufferScore.toString());
@@ -140,7 +139,7 @@ function getAvgHeartrate(payload){
 }
 
 function getHeartrateZones(payload){
-    var ans = {z1: 0, z2: 0, z3: 0, z4: 0, z5: 0};
+    var ans = [0,0,0,0,0];
     var timeArr = payload[0].data;
     var heartrateArr = payload[2].data;
     for(var i = 1; i < timeArr.length; i++){
@@ -153,15 +152,15 @@ function getHeartrateZones(payload){
         var hrB = heartrateArr[i];
         var hrAvg = (hrA + hrB) / 2;
         if(hrAvg <= 116){
-            ans.z1 += timeElapsed;
+            ans[0] += timeElapsed;
         } else if(hrAvg <= 154){
-            ans.z2 += timeElapsed;
+            ans[1] += timeElapsed;
         } else if(hrAvg <= 173){
-            ans.z3 += timeElapsed;
+            ans[2] += timeElapsed;
         } else if(hrAvg <= 192){
-            ans.z4 += timeElapsed;
+            ans[3] += timeElapsed;
         } else{
-            ans.z5 += timeElapsed;
+            ans[4] += timeElapsed;
         }
     }
     return ans;
@@ -174,5 +173,16 @@ function getSufferScore(payload){
     const c = 45 / 3600;
     const d = 100 / 3600;
     const e = 120 / 3600;
-    return hrZones.z1 * a + hrZones.z2 * b + hrZones.z3 * c + hrZones.z4 * d + hrZones.z5 * e;
+    return hrZones[0] * a + hrZones[1] * b + hrZones[2] * c + hrZones[3] * d + hrZones[4] * e;
+}
+
+function payloadToActivityArr(payload){
+    var activityArr = [];
+    for(var i = 0; i < payload.length; i += 1){
+        var name = payload[i].name;
+        if(name.length > 20)
+            name = name.substring(0,20);
+        activityArr.push({name: name, id: payload[i].id});
+    }
+    return activityArr;
 }

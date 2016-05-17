@@ -1,15 +1,21 @@
 extends ./index.pug
 
 block partial
+  ul.side-nav.fixed.blue-grey
+    //- a.brand-logo(href='/') Strava Graphs
+    each activity in activityArr
+      li
+        a.activity(href='#' activity_id=activity.id) #{activity.name}
   .container
-    ul
-      each activity in activityArr
-        li
-          .row
-            .col.s12.m6
-              .card.deep-orange.darken-2
-                .card-content.white-text
-                  span.card-title #{activity.name}
-                  p
-                .card-action
-                  a(href='activities/'+activity.id) See Heart Rate Analysis
+    h3 Suffer Score:
+      span#suffer_score
+    table
+      tr
+        td
+          canvas#myChart(width="400" height="400")
+        td
+          canvas#myDonut(width="400" height="400")
+  //- script(type="text/javascript").
+  //-   var heartRateZones =!{JSON.stringify(heartRateZones)}
+  script(type="text/javascript" src="/bower_components/Chart.js/dist/Chart.js")
+  script(type="text/javascript" src="/js/app.js")

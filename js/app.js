@@ -1,11 +1,6 @@
 Chart.defaults.global.responsive = false;
+var heartRateZones = [0,0,0,0,0];
 
-var arr = [];
-arr.push(heartRateZones.z1);
-arr.push(heartRateZones.z2);
-arr.push(heartRateZones.z3);
-arr.push(heartRateZones.z4);
-arr.push(heartRateZones.z5);
 var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
     type: 'bar',
@@ -14,7 +9,7 @@ var myChart = new Chart(ctx, {
         datasets: [{
             label: 'Time in each zone',
             backgroundColor: ["#E7D9DA", "#E5C1C1", "#D9A7A8", "#FB0017", "#B40312"],
-            data: arr
+            data: heartRateZones
         }]
     },
     options: {
@@ -36,7 +31,35 @@ var myDonut= new Chart(ctx2, {
         datasets: [{
             label: 'Time in each zone',
             backgroundColor: ["#E7D9DA", "#E5C1C1", "#D9A7A8", "#FB0017", "#B40312"],
-            data: arr
+            data: heartRateZones
         }]
     }
 });
+
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    };
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+function updateCharts(activity_id){
+    return function(){
+        httpGetAsync('/api/heartrate/zones/' + activity_id, function(response){
+            var hrZones = JSON.parse(response);
+            myChart.data.datasets[0].data = hrZones;
+            myDonut.data.datasets[0].data = hrZones;
+            myChart.update();
+            myDonut.update();
+        });
+    };
+}
+
+var sideBarActivities = document.getElementsByClassName('activity');
+for(var i = 0; i < sideBarActivities.length; i += 1){
+    var sideBarActivity = sideBarActivities[i];
+    sideBarActivity.onclick = updateCharts(sideBarActivity.getAttribute('activity_id'));
+}
