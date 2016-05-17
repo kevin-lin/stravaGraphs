@@ -55,6 +55,9 @@ function updateCharts(activity_id){
             myChart.update();
             myDonut.update();
         });
+        httpGetAsync('/api/heartrate/sufferscore/' + activity_id, function(response){
+            document.getElementById('suffer_score').innerHTML = response;
+        });
     };
 }
 
