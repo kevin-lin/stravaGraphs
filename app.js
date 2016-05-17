@@ -53,42 +53,6 @@ app.get('/activities', function(req, res){
     });
 });
 
-app.get('/activities/:id', function(req, res){
-    var sufferScore = 0;
-    strava.streams.activity({'access_token': req.cookies.access_token, 'id': req.params.id, 'types':['heartrate', 'time']},function(err,payload) {
-        if(!err){
-            sufferScore = Math.round(getSufferScore(payload));
-            var heartRateZones = getHeartrateZones(payload);
-            res.render('charts', {activityArr: [{name: "foo", id: 123}], sufferScore: sufferScore, heartRateZones: heartRateZones});
-        }
-        else
-            console.log(err);
-    });
-});
-
-app.get('/api/heartrate', function(req, res){
-    strava.streams.activity({'id': 572978386, 'types':['heartrate', 'time']},function(err,payload) {
-        if(!err) {
-            res.json(payload);
-        }
-        else {
-            console.log(err);
-        }
-    });
-});
-
-app.get('/api/heartrate/average', function(req, res){
-    strava.streams.activity({'id': 572978386, 'types':['heartrate', 'time']},function(err,payload) {
-        if(!err) {
-            var avghr = Math.round(getAvgHeartrate(payload));
-            res.send(avghr.toString());
-        }
-        else {
-            console.log(err);
-        }
-    });
-});
-
 app.get('/api/heartrate/zones/:activity_id', function(req, res){
     strava.streams.activity({'access_token': req.cookies.access_token, 'id': req.params.activity_id, 'types':['heartrate', 'time']},function(err,payload) {
         if(!err) {
@@ -119,6 +83,8 @@ app.listen(process.env.PORT || 8080, function(){
 const AUTOPAUSE_INTERVAL = 18;
 
 function getAvgHeartrate(payload){
+    if(payload.length != 3)
+        return 0;
     var timeArr = payload[0].data;
     var heartrateArr = payload[2].data;
     var numerator = 0;
@@ -140,6 +106,8 @@ function getAvgHeartrate(payload){
 
 function getHeartrateZones(payload){
     var ans = [0,0,0,0,0];
+    if(payload.length != 3)
+        return ans;
     var timeArr = payload[0].data;
     var heartrateArr = payload[2].data;
     for(var i = 1; i < timeArr.length; i++){
